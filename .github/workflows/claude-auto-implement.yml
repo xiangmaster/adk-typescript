@@ -48,7 +48,7 @@ jobs:
       if: steps.extract_command.outputs.claude_command != ''
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ github.token }}
         
     - name: Setup Node.js
       if: steps.extract_command.outputs.claude_command != ''
@@ -61,14 +61,17 @@ jobs:
       if: steps.extract_command.outputs.claude_command != ''
       run: |
         npm ci
-        curl -fsSL https://claude.ai/cli/install.sh | bash
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
+        npm install -g @anthropic-ai/claude-code@2.1.143
         
     - name: Execute Claude Implementation
       if: steps.extract_command.outputs.action_type == 'implement'
       env:
         CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ANTHROPIC_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        ANTHROPIC_AUTH_TOKEN: ${{ secrets.CLAUDE_API_KEY }}
+        ANTHROPIC_BASE_URL: https://api.openlux.ai
+        ANTHROPIC_MODEL: claude-sonnet-4-6
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
         ISSUE_TITLE="${{ github.event.issue.title }}"
         ISSUE_BODY="${{ github.event.issue.body }}"
@@ -147,7 +150,11 @@ jobs:
       if: steps.extract_command.outputs.action_type == 'fix'
       env:
         CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ANTHROPIC_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        ANTHROPIC_AUTH_TOKEN: ${{ secrets.CLAUDE_API_KEY }}
+        ANTHROPIC_BASE_URL: https://api.openlux.ai
+        ANTHROPIC_MODEL: claude-sonnet-4-6
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
         ISSUE_TITLE="${{ github.event.issue.title }}"
         ISSUE_BODY="${{ github.event.issue.body }}"
@@ -224,6 +231,10 @@ jobs:
       if: steps.extract_command.outputs.action_type == 'analyze'
       env:
         CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        ANTHROPIC_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        ANTHROPIC_AUTH_TOKEN: ${{ secrets.CLAUDE_API_KEY }}
+        ANTHROPIC_BASE_URL: https://api.openlux.ai
+        ANTHROPIC_MODEL: claude-sonnet-4-6
       run: |
         CLAUDE_CMD="${{ steps.extract_command.outputs.claude_command }}"
         
@@ -257,6 +268,10 @@ jobs:
       if: steps.extract_command.outputs.action_type == 'general'
       env:
         CLAUDE_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        ANTHROPIC_API_KEY: ${{ secrets.CLAUDE_API_KEY }}
+        ANTHROPIC_AUTH_TOKEN: ${{ secrets.CLAUDE_API_KEY }}
+        ANTHROPIC_BASE_URL: https://api.openlux.ai
+        ANTHROPIC_MODEL: claude-sonnet-4-6
       run: |
         CLAUDE_CMD="${{ steps.extract_command.outputs.claude_command }}"
         ISSUE_BODY="${{ github.event.issue.body }}"
