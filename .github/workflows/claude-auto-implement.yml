@@ -48,7 +48,7 @@ jobs:
       if: steps.extract_command.outputs.claude_command != ''
       uses: actions/checkout@v4
       with:
-        token: ${{ github.token }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         
     - name: Setup Node.js
       if: steps.extract_command.outputs.claude_command != ''
