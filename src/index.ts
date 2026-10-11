@@ -34,3 +34,5 @@ export {
 
 // Export version
 export { version } from './google/adk/version';
+
+export const RELEASE_CHANNEL = 'adk-ts-lab-c3-e1d-7f3a9b2e';
